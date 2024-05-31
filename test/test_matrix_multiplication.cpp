@@ -128,6 +128,168 @@ TEST(ErrorsMatrixC, Error17){
     ASSERT_TRUE(no_number_17);
 }
 
+TEST(ErrorsMatrixA, Error1){
+    //it spots Error 1: Element-wise multiplication of ones detected!
+    std::vector<std::vector<int>> A = {{1, 2 ,3},{4, 5, 6}}; 
+    std::vector<std::vector<int>> B = {{1, 2}, {0, 4}, {5, 0}, {7, 0}};
+    std::vector<std::vector<int>> C(2, std::vector<int>(2, 0));
+    std::vector<std::vector<int>> expected = {{58, 64},{139, 154}};
+    multiplyMatrices(A, B, C, 2, 3, 2);
+
+    //Search for element-wise multiplication of ones
+    bool element_wise = false;
+    for (int i = 0; i < A.size(); ++i)
+        for (int j = 0; j < A[i].size(); ++j)
+            if (A[i][j] != 1) element_wise = true;
+    
+    ASSERT_TRUE(element_wise);
+
+}
+
+TEST(ErrorsMatrixA, Error2){
+    //it spots Error 2: Matrix A contains the number 7!
+    std::vector<std::vector<int>> A = {{7, 5, 6},{7, 8, 9}};
+    std::vector<std::vector<int>> B = {{0, 8},{0, 10},{0, 12}};
+    std::vector<std::vector<int>> C(2, std::vector<int>(2, 0));
+    
+    multiplyMatrices(A, B, C, 2, 3, 2);
+
+    //Search for number 7 in matrix A
+    bool found = false;
+    for (int i = 0; i < A.size(); ++i)
+        for (int j = 0; j < A[i].size(); ++j)
+            if (A[i][j] == 7) found = true;
+    
+    ASSERT_TRUE(found);
+}
+
+TEST(ErrorsMatrixA, Error3){
+    //it spots Error 3: Matrix A contains a negative number!
+    std::vector<std::vector<int>> A = {{-1, 5, 6},{7, 8, 9}};
+    std::vector<std::vector<int>> B = {{0, 8},{0, 10},{0, 12}};
+    std::vector<std::vector<int>> C(2, std::vector<int>(2, 0));
+    
+    multiplyMatrices(A, B, C, 2, 3, 2);
+
+    //Search for negative number in matrix A
+    bool negative = false;
+    for (int i = 0; i < A.size(); ++i)
+        for (int j = 0; j < A[i].size(); ++j)
+            if (A[i][j] < 0) negative = true;
+    
+    ASSERT_TRUE(negative);
+}
+
+TEST(ErrorsMatrixA, Error10){
+    //it spots Error 10: A row in matrix A contains more than one '1'!
+    std::vector<std::vector<int>> A = {{1, 1, 3},{4, 5, 6}};
+    std::vector<std::vector<int>> B = {{7, 8},{9, 10},{11, 12}};
+    std::vector<std::vector<int>> C(2, std::vector<int>(2, 0));
+    
+    multiplyMatrices(A, B, C, 2, 3, 2);
+
+    //Search for number of ones in a row in matrix A
+    bool more_than_one = false;
+    for (int i = 0; i < A.size(); ++i){
+        int ones = 0;
+        for (int j = 0; j < A[i].size(); ++j)
+            if (A[i][j] == 1) ones++;
+        if (ones > 1) more_than_one = true;
+    }
+
+    ASSERT_TRUE(more_than_one);
+}
+
+TEST(ErrorsMatrixA, Error18){
+    //it spots Error 18: Matrix A is a square matrix!
+    std::vector<std::vector<int>> A = {{1, 2, 3},{4, 5, 6},{7, 8, 9}};
+    std::vector<std::vector<int>> B = {{7, 8, 0},{9, 10, 0},{11, 12, 0}};
+    std::vector<std::vector<int>> C(3, std::vector<int>(3, 0));
+    
+    multiplyMatrices(A, B, C, 3, 3, 3);
+    
+    ASSERT_EQ(A.size(), A[0].size());
+}
+
+TEST(ErrorsMatrixA, Error20){
+    //it spots Error 20: Number of columns in matrix A is odd!!
+    std::vector<std::vector<int>> A = {{0,0,0}};
+    std::vector<std::vector<int>> B = {{1}, {2}, {3}};
+    std::vector<std::vector<int>> C(1, std::vector<int>(1, 0));
+
+    multiplyMatrices(A, B, C, 1, 3, 1);
+
+    std::cout << A[0].size() << "------------------------------------------"<< std::endl;
+    std::cout << A[0].size() % 2 << "------------------------------------------"<< std::endl;
+
+    bool colsA = A[0].size() % 2 == 0 ? false : true;
+
+    ASSERT_TRUE(colsA);
+    
+}
+
+TEST(ErrorsMatrixC, Error6){
+    //it spots Error 6: Result matrix contains a number bigger than 100!
+    std::vector<std::vector<int>> A = {{1, 100, 3},{4, 5, 6},{7, 8, 9}};
+    std::vector<std::vector<int>> B = {{7, 100, 0},{9, 10, 0},{11, 12, 0}};
+    std::vector<std::vector<int>> C(3, std::vector<int>(3, 0));
+    
+    multiplyMatrices(A, B, C, 3, 3, 3);
+
+   //Search for number bigger than 100 in matrix C
+    bool hund = false;
+    for (int i = 0; i < C.size(); ++i)
+        for (int j = 0; j < C[i].size(); ++j)
+            if (C[i][j] > 100) hund = true;
+    
+    ASSERT_TRUE(hund);
+    
+}
+
+TEST(ErrorsMatrixC, Error7){
+    //it spots Error 7: Result matrix contains a number between 11 and 20!
+    std::vector<std::vector<int>> A = {{1, 2, 3},{4, 5, 6},{7, 8, 9}};
+    std::vector<std::vector<int>> B = {{7, 100, 0},{9, 10, 0},{11, 12, 0}};
+    std::vector<std::vector<int>> C(3, std::vector<int>(3, 0));
+    
+    multiplyMatrices(A, B, C, 3, 3, 3);
+
+   //Search for number  between 11 and 20!
+    bool range = false;
+    for (int i = 0; i < C.size(); ++i)
+        for (int j = 0; j < C[i].size(); ++j)
+            if (C[i][j] < 11 && C[i][j] < 20) range = true;
+    
+    ASSERT_TRUE(range);
+    
+}
+
+TEST(ErrorsMatrixC, Error8){
+    //it spots Error 8: Result matrix contains zero!
+    std::vector<std::vector<int>> A = {{0,0,0}};
+    std::vector<std::vector<int>> B = {{1}, {2}, {3}};
+    std::vector<std::vector<int>> C(1, std::vector<int>(1, 0));
+
+    multiplyMatrices(A, B, C, 1, 3, 1);
+
+    std::vector<std::vector<int>> expected = {
+        {58},
+    };
+
+    ASSERT_EQ(C, expected);
+
+
+   //Search for 0 in matrix C
+    bool zero = false;
+    for (int i = 0; i < C.size(); ++i)
+        for (int j = 0; j < C[i].size(); ++j)
+            if (C[i][j] == 0 ) zero = true;
+    
+    // ASSERT_TRUE(zero);
+    
+}
+
+
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
