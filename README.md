@@ -66,7 +66,7 @@ The repository contains the following components:
    This is defined in the file "SE/.github/workflows/testing.yml. Every time someone push something or does a pull request, a remote
    virtual machine, offered by GitHub is allocated to compile, execute and test the code. The result is visible on the Github
    repository:
-   ![image_git](image/image_git.png)
+   ![image_git](image_git.png)
 
    In the image, all the tests performed have failed; we expected this behaviour since we designed test cases in order
    to verify the reliability of our tests.
